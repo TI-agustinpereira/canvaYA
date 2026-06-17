@@ -1,0 +1,11 @@
+
+canvaYA
+
+Generacion programatica de la presentacion anual de encuesta de clima. 
+
+A partir de un excel de Humand, lo segrega en diferentes dataframes, uno por slide.
+
+Guarda todos los dataframes como su propio excel, se inicializa un bot RPA con playwright.
+
+Este tiene el deber de entrar a canva.com y actualizar las tablas con los excels descargados.
+
