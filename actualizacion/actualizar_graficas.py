@@ -131,15 +131,7 @@ def usar_canva(paths: list[str], diferencias: list[list[int]]):
             page.wait_for_timeout(100)
             page.keyboard.type(f"{diferencias[1][i]}") if diferencias[1][i] < 0 else page.keyboard.type(f"+{diferencias[1][i]}")
         
-        # for i in range(8):
-
-        #     page.click(f"div#{burbujas_slide_7[i]}", click_count=3)    
-        #     page.wait_for_timeout(100)
-        #     page.keyboard.press("Control+a")
-        #     page.wait_for_timeout(100)
-        #     page.keyboard.press("Backspace")
-        #     page.wait_for_timeout(100)
-        #     page.keyboard.type(f"-{diferencias[0][i]}") if diferencias[0][i] < 0 else page.keyboard.type(f"+{diferencias[0][i]}")
+        page.wait_for_timeout(800)
         
         context.close()
 
