@@ -1,0 +1,9 @@
+informacion/datos/
+informacion/resultados/
+informacion/__pycache__/*
+actualizacion/__pycache__/*
+actualizacion/canva_session/*
+canva_session/*
+venv/
+planes.md
+.env

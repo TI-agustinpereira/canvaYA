@@ -31,15 +31,13 @@ def generar_df_slide_1(data_frame_actual: pd.DataFrame, data_frame_pasado: pd.Da
 
     diferencias_1 = result1[f"{fecha}"] - result1[f"{fecha - 1}"]
 
-    # print de las diferencias para que las calcule la computadora
-    print("las diferencias entre periodos para la primer slide son:")
-    print(diferencias_1.to_string(index=False))
-
     # guardar excel para actualizar canva
     result1.to_excel(f"informacion/resultados/resultados_generales_{fecha}.xlsx", index=False)
 
+    return diferencias_1, f"informacion/resultados/resultados_generales_{fecha}.xlsx"
+
 # df slide 2: corporativo, comercial, compania por area para fecha
-def generar_df_slide_2(data_frame_actual: pd.DataFrame, data_frame_pasado: pd.DataFrame):
+def generar_df_slide_2(data_frame_actual: pd.DataFrame, data_frame_pasado: pd.DataFrame) -> str:
 
     resultados_por_dimension_actual = data_frame_actual.iloc[1:9, :4]
     resultados_por_dimension_pasado = data_frame_pasado.iloc[1:9, :4]
@@ -59,6 +57,8 @@ def generar_df_slide_2(data_frame_actual: pd.DataFrame, data_frame_pasado: pd.Da
     # guardar excel para actualizar canva
     result2.to_excel(f"informacion/resultados/resultados_por_dimension_{fecha}.xlsx", index=False)
 
+    return f"informacion/resultados/resultados_por_dimension_{fecha}.xlsx"
+
 # df slide 3: comercial para la fecha vs fecha anterior, por cada area
 def generar_df_slide_3(data_frame_actual: pd.DataFrame, data_frame_pasado: pd.DataFrame):
     
@@ -74,34 +74,47 @@ def generar_df_slide_3(data_frame_actual: pd.DataFrame, data_frame_pasado: pd.Da
 
     diferencias_2 = result_comercial[f"Comercial {fecha}"] - result_comercial[f"Comercial {fecha - 1}"]
 
-    # print de las diferencias para que las calcule la computadora
-    print("las diferencias entre periodos para la segunda slide son:")
-    print(diferencias_2.to_string(index=False))
-
     # guardar en excel para actualizar el canva
     result_comercial.to_excel(f"informacion/resultados/resultados_comerciales_{fecha}.xlsx", index=False)
 
+    return diferencias_2, f"informacion/resultados/resultados_comerciales_{fecha}.xlsx"
+
 # slide 4???? que es el enp y por que no tiene sentido xd
 def generar_df_slide_4():
+
+    # div id de enps en orden: LBhNvWtfJcs0b2kb, LBdV0jZJ6FptmWXv, LBzXRHnW6hgbR7h7
+
+    # input class de slider de porcentaje: bCVoGQ aWBg0w n1hUmA xcyqug. hacer click, poner el valor, enter y repetir para cada uno
     ...
 
 # df slide 5: ranking de categorias por valor numerico, corporativo vs comercial
-def generar_df_slide_5(data_frame_actual: pd.DataFrame, data_frame_pasado: pd.DataFrame):
+def generar_df_slide_5(data_frame_actual: pd.DataFrame):
 
     resultados_corporativos = data_frame_actual.iloc[1:9, [0, 2]]
     ranking_corporativo_actual = resultados_corporativos.sort_values(by="Corporativo", ascending=False)
 
     resultados_comerciales_actual = data_frame_actual.iloc[1:9, [0, 3]]
     ranking_comercial_actual = resultados_comerciales_actual.sort_values(by="Operativo", ascending=False)
+
+    print(f"ranking corporativo: \n{ranking_corporativo_actual} \nranking comercial: \n{ranking_comercial_actual}")
     # la computadora te ordena el codigo automaticamente. solo falta ordenar manualmente las imagenes.
 
-def segregar():
+def generar_df_slide_6(data_frame_actual: pd.DataFrame, data_frame_pasado: pd.DataFrame):
+    """
+    Imprime en terminal las categorias que mejoraron y las que empeoraron para hacer el ordenamiento de slide 10
+    """
+    resultados_por_dimension_actual = data_frame_actual.iloc[1:9, :4]
+    resultados_por_dimension_pasado = data_frame_pasado.iloc[1:9, :4]
 
-    actual = pd.read_excel(f"informacion/datos/encuesta_clima_{fecha - 1}.xlsx")
-    pasado = pd.read_excel(f"informacion/datos/encuesta_clima_{fecha - 2}.xlsx")
+    merged = pd.merge(
+    resultados_por_dimension_pasado,
+    resultados_por_dimension_actual,
+    on="Dimensión",
+    suffixes=("_pasado", "_actual")
+)
 
-    generar_df_slide_1(actual, pasado)
-    generar_df_slide_2(actual, pasado)
-    generar_df_slide_3(actual, pasado)
-    # generar_df_slide_4(actual, pasado)
-    generar_df_slide_5(actual, pasado)
+    mejoraron = merged[merged["Total_actual"] > merged["Total_pasado"]]["Dimensión"].tolist()
+    empeoraron = merged[merged["Total_actual"] <= merged["Total_pasado"]]["Dimensión"].tolist()
+    
+    print(f'  mejoraron: {", ".join(mejoraron)}')
+    print(f'  empeoraron: {", ".join(empeoraron)}')
